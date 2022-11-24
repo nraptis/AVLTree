@@ -2,12 +2,10 @@
 //  AVLTree.swift
 //  TreeTests
 //
-//  Created by Nicky Taylor on 11/21/22.
+//  Created by Nick Raptis on 11/21/22.
 //
 
 import Foundation
-
-//https://algs4.cs.princeton.edu/code/edu/princeton/cs/algs4/AVLTreeST.java.html
 
 class AVLTree<Element: Comparable>: BinarySearchTreeConforming {
 
@@ -92,7 +90,6 @@ class AVLTree<Element: Comparable>: BinarySearchTreeConforming {
         guard var node = node else {
             return nil
         }
-        
         if element < node.value {
             node.left = remove(node.left, element)
         } else if element > node.value {
@@ -118,70 +115,6 @@ class AVLTree<Element: Comparable>: BinarySearchTreeConforming {
         node.height = 1 + max(height(node.left), height(node.right))
         return balance(node)
     }
-    
-    
-    private func rotateRight(_ node: BinaryTreeNode) -> BinaryTreeNode {
-        
-        guard let swap = node.left else {
-            return node
-        }
-        node.left = swap.right
-        swap.right = node
-        swap.count = node.count
-        node.count = 1 + count(node.left) + count(node.right)
-        node.height = 1 + max(height(node.left), height(node.right))
-        swap.height = 1 + max(height(swap.left), height(swap.right))
-        return swap
-    }
-    
-    private func rotateLeft(_ node: BinaryTreeNode) -> BinaryTreeNode {
-        guard let swap = node.right else {
-            return node
-        }
-        node.right = swap.left
-        swap.left = node
-        swap.count = node.count
-        node.count = 1 + count(node.left) + count(node.right)
-        node.height = 1 + max(height(node.left), height(node.right))
-        swap.height = 1 + max(height(swap.left), height(swap.right))
-        return swap
-    }
-    
-    private func balanceFactor(_ node: BinaryTreeNode) -> Int {
-        return height(node.left) - height(node.right)
-    }
-    
-    private func balance(_ node: BinaryTreeNode) -> BinaryTreeNode {
-        
-        var x = node
-        //if (balanceFactor(x) < -1) {
-        if balanceFactor(x) < -1 {
-            
-            //if (balanceFactor(x.right) > 0) {
-            if let right = x.right {
-                if balanceFactor(right) > 0 {
-                    //x.right = rotateRight(x.right);
-                    x.right = rotateRight(right)
-                }
-            }
-            //x = rotateLeft(x);
-            x = rotateLeft(x)
-            
-        //else if (balanceFactor(x) > 1) {
-        } else if balanceFactor(x) > 1 {
-            // if (balanceFactor(x.left) < 0) {
-            if let left = x.left {
-                if balanceFactor(left) < 0 {
-                    //x.left = rotateLeft(x.left);
-                    x.left = rotateLeft(left)
-                }
-            }
-            //x = rotateRight(x);
-            x = rotateRight(x)
-        }
-        return x;
-    }
-    
     
     func popMin() -> Element? {
         let result = getMin()
@@ -219,26 +152,13 @@ class AVLTree<Element: Comparable>: BinarySearchTreeConforming {
     }
     
     func removeMin(_ node: BinaryTreeNode) -> BinaryTreeNode? {
-        
-        //if (x.left == null) return x.right;
-        if node.left == nil {
-            return node.right
-        }
-        
-        //x.left = deleteMin(x.left);
         if let left = node.left {
             node.left = removeMin(left)
         } else {
-            node.left = nil
+            return node.right
         }
-        
-        //x.size = 1 + size(x.left) + size(x.right);
         node.count = 1 + count(node.left) + count(node.right)
-        
-        //x.height = 1 + Math.max(height(x.left), height(x.right));
         node.height = 1 + max(height(node.left), height(node.right))
-        
-        //return balance(x);
         return balance(node)
     }
     
@@ -278,25 +198,13 @@ class AVLTree<Element: Comparable>: BinarySearchTreeConforming {
     }
     
     func removeMax(_ node: BinaryTreeNode) -> BinaryTreeNode? {
-        //if (x.right == null) return x.left;
-        if node.right == nil {
-            return node.left
-        }
-        
-        //x.right = deleteMax(x.right);
         if let right = node.right {
             node.right = removeMax(right)
         } else {
-            node.right = nil
+            return node.left
         }
-        
-        //x.size = 1 + size(x.left) + size(x.right);
         node.count = 1 + count(node.left) + count(node.right)
-        
-        //x.height = 1 + Math.max(height(x.left), height(x.right));
         node.height = 1 + max(height(node.left), height(node.right))
-        
-        //return balance(x);
         return balance(node)
     }
     
@@ -318,4 +226,74 @@ class AVLTree<Element: Comparable>: BinarySearchTreeConforming {
         }
     }
     
+    public func index(_ element: Element) -> Int? {
+        return index(root, element)
+    }
+    
+    public func index(_ node: BinaryTreeNode?, _ element: Element) -> Int? {
+        guard let node = node else {
+            return nil
+        }
+        if element < node.value {
+            return index(node.left, element)
+        } else if element > node.value {
+            var result = 1 + count(node.left)
+            if let indexFromRight = index(node.right, element) {
+                result += indexFromRight
+            }
+            return result
+        } else {
+            return count(node.left)
+        }
+    }
+    
+    private func rotateRight(_ node: BinaryTreeNode) -> BinaryTreeNode {
+        guard let swap = node.left else {
+            return node
+        }
+        node.left = swap.right
+        swap.right = node
+        swap.count = node.count
+        node.count = 1 + count(node.left) + count(node.right)
+        node.height = 1 + max(height(node.left), height(node.right))
+        swap.height = 1 + max(height(swap.left), height(swap.right))
+        return swap
+    }
+    
+    private func rotateLeft(_ node: BinaryTreeNode) -> BinaryTreeNode {
+        guard let swap = node.right else {
+            return node
+        }
+        node.right = swap.left
+        swap.left = node
+        swap.count = node.count
+        node.count = 1 + count(node.left) + count(node.right)
+        node.height = 1 + max(height(node.left), height(node.right))
+        swap.height = 1 + max(height(swap.left), height(swap.right))
+        return swap
+    }
+    
+    private func balanceFactor(_ node: BinaryTreeNode) -> Int {
+        return height(node.left) - height(node.right)
+    }
+    
+    private func balance(_ node: BinaryTreeNode) -> BinaryTreeNode {
+        var swap = node
+        if balanceFactor(swap) < -1 {
+            if let right = swap.right {
+                if balanceFactor(right) > 0 {
+                    swap.right = rotateRight(right)
+                }
+            }
+            swap = rotateLeft(swap)
+        } else if balanceFactor(swap) > 1 {
+            if let left = swap.left {
+                if balanceFactor(left) < 0 {
+                    swap.left = rotateLeft(left)
+                }
+            }
+            swap = rotateRight(swap)
+        }
+        return swap
+    }
 }

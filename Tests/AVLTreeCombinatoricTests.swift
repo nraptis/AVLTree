@@ -42,13 +42,21 @@ final class AVLTreeCombinatoricTests: XCTestCase {
         
         index = 0
         while index < count {
-            guard let value = mockTree.select(index) else {
-                XCTFail("Mock tree should be able to select item at \(index), data = \(mockTree.data)")
-                return false
-            }
+            let value = mockTree.data[index]
             if !realTree.contains(value) {
                 print("mock: \(mockTree.data)")
                 XCTFail("Trees does not contain [\(index)]. AVL: MISSING, MOCK: \(value)")
+                return false
+            }
+            index += 1
+        }
+        
+        index = 0
+        while index < count {
+            let value = mockTree.data[index]
+            if mockTree.index(value) != realTree.index(value) {
+                print("mock: \(mockTree.data)")
+                XCTFail("Trees does not contain [\(value)] at same index. AVL: \(mockTree.index(value) ?? -1), MOCK: \(realTree.index(value) ?? -1)")
                 return false
             }
             index += 1

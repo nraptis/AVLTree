@@ -39,6 +39,29 @@ final class AVLTreeStressTests: XCTestCase {
             
             index += 1
         }
+        
+        index = 0
+        while index < count {
+            let value = mockTree.data[index]
+            if !realTree.contains(value) {
+                print("mock: \(mockTree.data)")
+                XCTFail("Trees does not contain [\(index)]. AVL: MISSING, MOCK: \(value)")
+                return false
+            }
+            index += 1
+        }
+        
+        index = 0
+        while index < count {
+            let value = mockTree.data[index]
+            if mockTree.index(value) != realTree.index(value) {
+                print("mock: \(mockTree.data)")
+                XCTFail("Trees does not contain [\(value)] at same index. AVL: \(mockTree.index(value) ?? -1), MOCK: \(realTree.index(value) ?? -1)")
+                return false
+            }
+            index += 1
+        }
+        
         return true
     }
     
@@ -89,6 +112,64 @@ final class AVLTreeStressTests: XCTestCase {
         }
     }
     
+    func testAdd1000PopAllMins_10Times() {
+        for _ in 0..<10 {
+            var insert = [Int]()
+            for _ in 0..<1000 { insert.append(Int.random(in: 0...1000)) }
+            
+            let realTree = AVLTree<Int>()
+            let mockTree = MockSearchTree<Int>()
+            
+            for value in insert {
+                realTree.insert(value)
+                mockTree.insert(value)
+            }
+            
+            while mockTree.count > 0 {
+                let min1 = realTree.popMin()
+                let min2 = mockTree.popMin()
+                if min1 != min2 {
+                    XCTFail("Failed on popping mins... \(min1 ?? -1) vs \(min2 ?? -1)")
+                    return
+                }
+                if !compareTrees(realTree: realTree, mockTree: mockTree) {
+                    print("Failed on popping mins... \(insert) ... \(min1 ?? -1) vs \(min2 ?? -1)")
+                    return
+                }
+            }
+            
+        }
+    }
+    
+    func testAdd1000PopAllMaxes_10Times() {
+        for _ in 0..<10 {
+            var insert = [Int]()
+            for _ in 0..<1000 { insert.append(Int.random(in: 0...1000)) }
+            
+            let realTree = AVLTree<Int>()
+            let mockTree = MockSearchTree<Int>()
+            
+            for value in insert {
+                realTree.insert(value)
+                mockTree.insert(value)
+            }
+            
+            while mockTree.count > 0 {
+                let max1 = realTree.popMax()
+                let max2 = mockTree.popMax()
+                if max1 != max2 {
+                    XCTFail("Failed on popping maxes... \(max1 ?? -1) vs \(max2 ?? -1)")
+                    return
+                }
+                if !compareTrees(realTree: realTree, mockTree: mockTree) {
+                    print("Failed on popping maxes... \(insert) ... \(max1 ?? -1) vs \(max2 ?? -1)")
+                    return
+                }
+            }
+            
+        }
+    }
+    
     func arrayBig() -> [Int] {
         let count = Int.random(in: 0...100)
         var result = [Int](repeating: 0, count: count)
@@ -112,7 +193,7 @@ final class AVLTreeStressTests: XCTestCase {
         let realTree = AVLTree<Int>()
         let mockTree = MockSearchTree<Int>()
         
-        for loop in 0...2500 {
+        for loop in 0...1000 {
         
             let operation = Int.random(in: 0...100)
             
@@ -152,12 +233,11 @@ final class AVLTreeStressTests: XCTestCase {
                 if Int.random(in: 0...5) == 0 {
                     realTree.clear()
                     mockTree.clear()
-                    print("Kill Switch On Loop: \(loop)")
                 }
             }
             
             if (loop % 100) == 0 {
-                print("Loop: \(loop), count1: \(realTree.count), count2: \(mockTree.count)")
+                print("Loop: \(loop) / 1000, count1: \(realTree.count), count2: \(mockTree.count)")
             }
             if !compareTrees(realTree: realTree, mockTree: mockTree) {
                 print("Failed stress test, operation: \(operation)")

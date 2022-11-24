@@ -23,6 +23,7 @@
 		0D74CAF1292D9ED400E41A5B /* Array+Permutations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D74CAF0292D9ED400E41A5B /* Array+Permutations.swift */; };
 		0D74CAF3292D9F4000E41A5B /* Array+Subsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D74CAF2292D9F4000E41A5B /* Array+Subsets.swift */; };
 		0D74CAF5292DBB2800E41A5B /* AVLTreeStressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D74CAF4292DBB2800E41A5B /* AVLTreeStressTests.swift */; };
+		0D87235B292EFE98002205E9 /* BinaryTreeConforming+Print.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D87235A292EFE98002205E9 /* BinaryTreeConforming+Print.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		0D74CAF0292D9ED400E41A5B /* Array+Permutations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Permutations.swift"; sourceTree = "<group>"; };
 		0D74CAF2292D9F4000E41A5B /* Array+Subsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Subsets.swift"; sourceTree = "<group>"; };
 		0D74CAF4292DBB2800E41A5B /* AVLTreeStressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVLTreeStressTests.swift; sourceTree = "<group>"; };
+		0D87235A292EFE98002205E9 /* BinaryTreeConforming+Print.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BinaryTreeConforming+Print.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				0D74CABA292C299800E41A5B /* Assets.xcassets */,
 				0D74CABC292C299800E41A5B /* Preview Content */,
 				0D74CAC4292C2AD200E41A5B /* BinaryTreeConforming.swift */,
+				0D87235A292EFE98002205E9 /* BinaryTreeConforming+Print.swift */,
 				0D74CAD7292C31DB00E41A5B /* AVLTree.swift */,
 			);
 			path = TreeTests;
@@ -230,6 +233,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D87235B292EFE98002205E9 /* BinaryTreeConforming+Print.swift in Sources */,
 				0D74CAB9292C299600E41A5B /* ContentView.swift in Sources */,
 				0D74CAD6292C30A800E41A5B /* MaxHeap.swift in Sources */,
 				0D74CAB7292C299600E41A5B /* TreeTestsApp.swift in Sources */,

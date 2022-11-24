@@ -33,7 +33,7 @@ class MockSearchTree<Element: Comparable>: BinarySearchTreeConforming {
         }
     }
     
-    func contains(_ element: BinaryTreeNode.Element) -> Bool {
+    public func index(_ element: Element) -> Int? {
         var lo = 0
         var hi = data.count - 1
         while lo <= hi {
@@ -43,10 +43,14 @@ class MockSearchTree<Element: Comparable>: BinarySearchTreeConforming {
             } else if element > data[mid] {
                 lo = mid + 1
             } else {
-                return true
+                return mid
             }
         }
-        return false
+        return nil
+    }
+    
+    func contains(_ element: BinaryTreeNode.Element) -> Bool {
+        return index(element) != nil
     }
     
     func clear() {
