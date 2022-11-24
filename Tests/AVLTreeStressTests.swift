@@ -112,7 +112,7 @@ final class AVLTreeStressTests: XCTestCase {
         let realTree = AVLTree<Int>()
         let mockTree = MockSearchTree<Int>()
         
-        for loop in 0...10000 {
+        for loop in 0...2500 {
         
             let operation = Int.random(in: 0...100)
             

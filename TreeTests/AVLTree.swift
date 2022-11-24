@@ -103,88 +103,48 @@ class AVLTree<Element: Comparable>: BinarySearchTreeConforming {
             } else if node.right == nil {
                 return node.left
             } else {
-                
-                let y = node
-                if let right = y.right {
+                let swap = node
+                if let right = swap.right {
                     node = right
                     while let left = node.left {
                         node = left
                     }
-                    if let replacement = removeMin(right) {
-                        node.right = replacement
-                    } else {
-                        node.right = nil
-                    }
+                    node.right = removeMin(right)
                 }
-                
-                node.left = y.left
+                node.left = swap.left
             }
         }
-        
         node.count = 1 + count(node.left) + count(node.right)
         node.height = 1 + max(height(node.left), height(node.right))
-        
         return balance(node)
     }
     
     
     private func rotateRight(_ node: BinaryTreeNode) -> BinaryTreeNode {
         
-        
-        //Node y = x.left;
-        guard let y = node.left else {
-            print("Attempting illegal rotateRight")
+        guard let swap = node.left else {
             return node
         }
-        
-        //x.left = y.right;
-        node.left = y.right
-        
-        //y.right = x;
-        y.right = node
-        
-        //y.size = x.size;
-        y.count = node.count
-        
-        //x.size = 1 + size(x.left) + size(x.right);
+        node.left = swap.right
+        swap.right = node
+        swap.count = node.count
         node.count = 1 + count(node.left) + count(node.right)
-        
-        //x.height = 1 + Math.max(height(x.left), height(x.right));
         node.height = 1 + max(height(node.left), height(node.right))
-        
-        //y.height = 1 + Math.max(height(y.left), height(y.right));
-        y.height = 1 + max(height(y.left), height(y.right))
-        
-        return y
+        swap.height = 1 + max(height(swap.left), height(swap.right))
+        return swap
     }
     
     private func rotateLeft(_ node: BinaryTreeNode) -> BinaryTreeNode {
-        
-        //Node y = x.right;
-        guard let y = node.right else {
-            print("Attempting illegal rotateLeft")
+        guard let swap = node.right else {
             return node
         }
-        
-        //x.right = y.left;
-        node.right = y.left
-        
-        //y.left = x;
-        y.left = node
-        
-        //y.size = x.size;
-        y.count = node.count
-        
-        //x.size = 1 + size(x.left) + size(x.right);
+        node.right = swap.left
+        swap.left = node
+        swap.count = node.count
         node.count = 1 + count(node.left) + count(node.right)
-        
-        //x.height = 1 + Math.max(height(x.left), height(x.right));
         node.height = 1 + max(height(node.left), height(node.right))
-        
-        //y.height = 1 + Math.max(height(y.left), height(y.right));
-        y.height = 1 + max(height(y.left), height(y.right))
-        
-        return y
+        swap.height = 1 + max(height(swap.left), height(swap.right))
+        return swap
     }
     
     private func balanceFactor(_ node: BinaryTreeNode) -> Int {
