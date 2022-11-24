@@ -32,6 +32,25 @@ final class AVLTreeSimpleTests: XCTestCase {
         XCTAssert(tree.count == 3)
         tree.clear()
         XCTAssert(tree.count == 0)
+        XCTAssert(tree.root == nil)
+    }
+    
+    func testInsertThreeElementsAndClearInsertThreeElementsAndClear() {
+        let tree = AVLTree<Int>()
+        tree.insert(1)
+        tree.insert(2)
+        tree.insert(3)
+        XCTAssert(tree.count == 3)
+        tree.clear()
+        XCTAssert(tree.count == 0)
+        XCTAssert(tree.root == nil)
+        tree.insert(4)
+        tree.insert(5)
+        tree.insert(6)
+        XCTAssert(tree.count == 3)
+        tree.clear()
+        XCTAssert(tree.count == 0)
+        XCTAssert(tree.root == nil)
     }
     
     func testInsertFiveElementsWithTwoDuplicates() {

@@ -10,11 +10,7 @@ import Foundation
 //https://algs4.cs.princeton.edu/code/edu/princeton/cs/algs4/AVLTreeST.java.html
 
 class AVLTree<Element: Comparable>: BinarySearchTreeConforming {
-    
-    
-    
-    //typealias BinaryTreeNode = AVLTreeNode<Element>
-    
+
     var root: AVLTreeNode<Element>?
     
     final class AVLTreeNode<Element>: BinaryTreeNodeConforming {
@@ -30,21 +26,13 @@ class AVLTree<Element: Comparable>: BinarySearchTreeConforming {
         }
     }
     
-    var count: Int { count(root) }
+    var count: Int {
+        root?.count ?? 0
+    }
     
     func clear() {
         root = nil
     }
-    
-    /*
-    private func clear(_ node: BinaryTreeNode?) {
-        guard let node = node else { return }
-        clear(node.left)
-        node.left = nil
-        clear(node.right)
-        node.right = nil
-    }
-    */
     
     private func count(_ node: BinaryTreeNode?) -> Int {
         node?.count ?? 0
@@ -62,8 +50,10 @@ class AVLTree<Element: Comparable>: BinarySearchTreeConforming {
         contains(element, root)
     }
     
-    func contains(_ element: Element, _ node: BinaryTreeNode?) -> Bool {
-        guard let node = node else { return false }
+    private func contains(_ element: Element, _ node: BinaryTreeNode?) -> Bool {
+        guard let node = node else {
+            return false
+        }
         if element < node.value {
             return contains(element, node.left)
         } else if element > node.value {
@@ -99,52 +89,27 @@ class AVLTree<Element: Comparable>: BinarySearchTreeConforming {
     }
     
     private func remove(_ node: BinaryTreeNode?, _ element: Element) -> BinaryTreeNode? {
-        
         guard var node = node else {
-            print("Attempting illegal remove")
             return nil
         }
         
-        //int cmp = key.compareTo(x.key);
-        //if (cmp < 0) {
         if element < node.value {
-            //x.left = delete(x.left, key);
             node.left = remove(node.left, element)
         } else if element > node.value {
-            //else if (cmp > 0) {
-            
-            //x.right = delete(x.right, key);
             node.right = remove(node.right, element)
         } else {
-            
-            /*
-             if (x.left == null) {
-             return x.right;
-             }
-             else if (x.right == null) {
-             return x.left;
-             }
-             */
-            
             if node.left == nil {
                 return node.right
             } else if node.right == nil {
                 return node.left
             } else {
                 
-                //Node y = x;
                 let y = node
-                
-                //x = min(y.right);
                 if let right = y.right {
                     node = right
                     while let left = node.left {
                         node = left
                     }
-                }
-
-                //x.right = deleteMin(y.right);
-                if let right = y.right {
                     if let replacement = removeMin(right) {
                         node.right = replacement
                     } else {
@@ -152,60 +117,13 @@ class AVLTree<Element: Comparable>: BinarySearchTreeConforming {
                     }
                 }
                 
-                
-                //x.left = y.left;
                 node.left = y.left
-                
-                
-                
-                /*
-                //Node y = x;
-                
-                
-                //x = min(y.right);
-                //node = getMinNode()
-                if let right = node.right {
-                    if let replacement = removeMin(right) {
-                        node = replacement
-                    }
-                    /*
-                    while let left = node.left {
-                        node = left
-                    }
-                    */
-                }
-                
-                //x.right = deleteMin(y.right);
-                if let right = node.right {
-                    node.right = removeMin(right)
-                } else {
-                    node.right = nil
-                }
-                
-                
-                //x.left = y.left;
-                 node.left = y.left
-                */
             }
-            
-            /*
-             else {
-             Node y = x;
-             x = min(y.right);
-             x.right = deleteMin(y.right);
-             x.left = y.left;
-             }
-             */
         }
         
-        
-        //x.size = 1 + size(x.left) + size(x.right);
         node.count = 1 + count(node.left) + count(node.right)
-        
-        //x.height = 1 + Math.max(height(x.left), height(x.right));
         node.height = 1 + max(height(node.left), height(node.right))
         
-        //return balance(x);
         return balance(node)
     }
     
